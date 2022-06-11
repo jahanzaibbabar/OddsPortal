@@ -23,27 +23,17 @@
     
     <div class="container">
             <h1 style="text-align: center; color : white; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; letter-spacing: 8px;">| CLEF DE BRAS |</h1>
-            <h2 class="mb-5">Welcome <b>{{request.user.username}} &nbsp;&nbsp;</b> <span><b style="align-self: right; cursor: pointer ; color: rgb(182, 57, 19);"><a href="{% url 'logout' %}"></a>LOGOUT</a></b></span></h2>
+            <h2 class="mb-5">Welcome <b>{{request.user.username}} &nbsp;&nbsp;</b> <span><b ><a href="{% url 'logout' %}" style="align-self: right; cursor: pointer ; color: rgb(182, 57, 19);">LOGOUT</a></b></span></h2>
             
-            <div class="dropdown show">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    Select Day
-                </a>
-                <br>
-                <br>
-                <h4><span style="color: brown;">STATUS : </span><span id="status"></span></h4>
-                <div id="details"></div>
-            
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    {% for date in dates %}
-                <a class="dropdown-item" href="{% url 'home_page' date.0 %}">{{date.1}}</a>
-                    
-                    {% endfor %}
-                </div>
+            <div id="match_date">
+                {% for date in dates %}
+                    <span><a href="{% url 'home_page' date.0%}">{{date.1}}</a></span> &nbsp;&nbsp;
+                {% endfor %}
             </div>
+            <br>
+            <h4><span style="color: brown;">STATUS : </span><span id="status"></span></h4>
+            <div id="details"></div>
 
-        
 
             <br>
             <div class="table-responsive">

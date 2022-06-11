@@ -92,12 +92,12 @@ def get_odds(request):
                 if odds[len(odds) - 1]:
                     if odds[0] not in isSatisfies:
                         isSatisfies.append(odds[0])
-                    # odds.append("green")
+                    odds.append("red")
 
                 else:
                     if odds[0] in isSatisfies:
                         isSatisfies.remove(odds[0])
-                        odds.append("red")
+                        odds.append("green")
                         return JsonResponse({"odds": odds})
                     # print(str(odds) + "is red")
                     return JsonResponse({"odds": []})

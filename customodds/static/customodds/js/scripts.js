@@ -5,14 +5,29 @@ current_status = document.getElementById("status")
 details_div = document.getElementById("details")
 
 async function getData() {
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     let date = document.URL.substring(document.URL.length - 8)
     let url = ""
-    if (isNaN(date))
+    if (isNaN(date)){
         url = 'https://www.oddsportal.com/matches/soccer/';
-    else
+        selected_date = document.getElementById("match_date").children[1].firstChild
+        selected_date.style.color = 'red'
+    }
+    else{
         url = 'https://www.oddsportal.com/matches/soccer/' + date;
-
-    console.log(url)
+        month = parseInt(date.substring(4,6))
+        day = parseInt(date.substring(6,8))
+        month = months[month - 1]
+        dates_div = document.getElementById("match_date").children
+        current_page_date = day.toString() +" " + month.toString()
+        console.log(current_page_date)
+        for(let i=0 ; i < dates_div.length; i++){
+            if (dates_div[i].textContent == current_page_date){
+                console.log(current_page_date, "passed")
+               dates_div[i].firstChild.style.color = "red"
+            }
+       }
+    }
         try {
             let res = await fetch('http://127.0.0.1:8000/urls/matches',{
                 method: 'POST',
@@ -33,20 +48,16 @@ async function renderData() {
     console.log(data)
     total_matches.innerHTML = "Total Number of Ongoing Matches : " + data["urls"].length.toString()
     details_div.appendChild(total_matches)
-    current_match = document.createElement('span');
-    details_div.appendChild(current_match)
     current_status.innerHTML = "GOTCHA..."
     let urls = await data["urls"]
     let row_index = 0
     current_status.innerHTML = "GETTING SINGLE MATCH DETAILS..."
     for(let i=0 ; i < urls.length ; i++){
         let keepTrying;
-        current_match.innerHTML = "  | Current Match Number : " + (i+1).toString()
-        
         do{
             try{
 
-                await fetch('http://127.0.0.1:8000/urls/odds', {
+                fetch('http://127.0.0.1:8000/urls/odds', {
                     method: 'POST',
             body: JSON.stringify({'url':urls[i]})
                 }).then(res => res.json())

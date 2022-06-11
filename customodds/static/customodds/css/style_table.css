@@ -61,12 +61,13 @@ h2 {
     -webkit-transition: .3s all ease;
     -o-transition: .3s all ease;
     transition: .3s all ease; }
-    .custom-table tbody tr:hover td, .custom-table tbody tr:focus td {
-      color: #fff; }
+   /* .custom-table tbody tr:hover td, .custom-table tbody tr:focus td {
+      border:1px solid red`; }
       .custom-table tbody tr:hover td a, .custom-table tbody tr:focus td a {
         color: #fdd114; }
       .custom-table tbody tr:hover td .more, .custom-table tbody tr:focus td .more {
         color: #fdd114; }
+        */
   .custom-table .td-box-wrap {
     padding: 0; }
   .custom-table .box {
