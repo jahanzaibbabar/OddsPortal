@@ -3,6 +3,7 @@ data_table = document.getElementById("data-table")
 table_body = data_table.appendChild(document.createElement('tbody'))
 current_status = document.getElementById("status")
 details_div = document.getElementById("details")
+row_index = 0
 
 async function getData() {
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -33,6 +34,7 @@ async function getData() {
                 method: 'POST',
             body: JSON.stringify({'url':url})
                 });
+            
             return await res.json();
         } catch (error) {
             console.log("error");
@@ -45,72 +47,72 @@ async function renderData() {
     current_status.innerHTML = "GETTING ALL THE MATCHES URLS..."
     let data = await getData();
     total_matches = document.createElement('span')
-    console.log(data)
-    total_matches.innerHTML = "Total Number of Ongoing Matches : " + data["urls"].length.toString()
+    try{
+        if (data["urls"].length == 0){
+            return renderData()
+        }else{
+            total_matches.innerHTML = "Total Number of Ongoing Matches : " + data["urls"].length.toString()
+        }
+    }
+    catch{
+        return renderData()
+    }
     details_div.appendChild(total_matches)
     current_status.innerHTML = "GOTCHA..."
     let urls = await data["urls"]
-    let row_index = 0
     current_status.innerHTML = "GETTING SINGLE MATCH DETAILS..."
+    match_number = document.createElement("span")
     for(let i=0 ; i < urls.length ; i++){
-        let keepTrying;
-        do{
-            try{
-
-                fetch('http://127.0.0.1:8000/urls/odds', {
-                    method: 'POST',
-            body: JSON.stringify({'url':urls[i]})
-                }).then(res => res.json())
-            .then(res => { 
-                data = res["odds"]
-
-                if (typeof data[5] !== 'undefined'){
-                    
-                    console.log(data + "this is data")
-                    var row = table_body.insertRow(row_index)
-                    row.style.color = data[9];
-                    console.log(data[9])
-                    row.scope = "row"
-                    var indexCell = row.insertCell(0)
-                    var timeCell = row.insertCell(1)
-                    var nameCell = row.insertCell(2)
-                    var scoreCell = row.insertCell(3)
-                    var oneOddCell = row.insertCell(4)
-                    var xOddCell = row.insertCell(5)
-                    var twoOddCell = row.insertCell(6)
-                    var payoutCell = row.insertCell(7)
-                    var openingOddCell = row.insertCell(8)
-                    indexCell.innerHTML = row_index + 1
-                    nameCell.innerHTML = data[0]
-                    oneOddCell.innerHTML = data[1]
-                    xOddCell.innerHTML = data[2]
-                    twoOddCell.innerHTML = data[3]
-                    openingOddCell.innerHTML = data[4]
-                    timeCell.innerHTML = data[6]
-                    scoreCell.innerHTML = data[7]
-                    payoutCell.innerHTML = data[5]
-                    row_index += 1
-                }
-            });
-            keepTrying = false
-            }catch{
-                keepTrying = true
-            }
-        }while(keepTrying)
+        set_data_to_table(urls[i],row_index)
     }
-    current_status.innerHTML = "Got All Matched Results"
+    current_status.innerHTML = "Got All Matches Results"
 }
 
 
-
-async function get_and_load_table(url){
-    fetch('http://127.0.0.1:8000/urls/odds', {
-        method: 'POST',
+function set_data_to_table(url){
+    try{
+        
+        fetch('http://127.0.0.1:8000/urls/odds', {
+            method: 'POST',
     body: JSON.stringify({'url':url})
         }).then(res => res.json())
     .then(res => { 
-        return res });
+        data = res["odds"]
+            if (data.length === 1){
+                return
+            }else if(data.length === 0 || typeof data == "undefined" || data == null){
+                console.log("retrying "+ url)
+                return set_data_to_table(url)
+            }
+            details_div.appendChild(match_number)
+            var row = table_body.insertRow(row_index)
+            row.style.color = data[9];
+            row.scope = "row"
+            var indexCell = row.insertCell(0)
+            var timeCell = row.insertCell(1)
+            var nameCell = row.insertCell(2)
+            var scoreCell = row.insertCell(3)
+            var oneOddCell = row.insertCell(4)
+            var xOddCell = row.insertCell(5)
+            var twoOddCell = row.insertCell(6)
+            var payoutCell = row.insertCell(7)
+            var openingOddCell = row.insertCell(8)
+            indexCell.innerHTML = row_index + 1
+            nameCell.innerHTML = data[0]
+            oneOddCell.innerHTML = data[1]
+            xOddCell.innerHTML = data[2]
+            twoOddCell.innerHTML = data[3]
+            openingOddCell.innerHTML = data[4]
+            timeCell.innerHTML = data[6]
+            scoreCell.innerHTML = data[7]
+            payoutCell.innerHTML = data[5]
+            row_index += 1
+        });
+    }catch{
+        console.log("data was null")
+    }
 }
+
 
 
 

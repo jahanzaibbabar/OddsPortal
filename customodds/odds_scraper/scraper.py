@@ -4,16 +4,13 @@ from selenium.webdriver.common.by import By
 import pathlib
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
-import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 import os
 
 os.environ["DEBUSSY"] = "1"
 
-# object of Options class
 c = Options()
-# passing headless parameter
 c.add_argument("--headless")
 
 
@@ -52,28 +49,34 @@ def get_single_match_result(url):
         driver.get(url)
 
     except Exception as e:
-        return None
-    try:
-        odds_table = driver.find_element(By.CLASS_NAME, 'detail-odds')
-    except:
+        driver.close()
         return get_single_match_result(url)
+
     try:
         pinnacle_element = driver.find_element(By.XPATH,
                                                "//*[contains(text(), 'Pinnacle')]")
         parent_pinnacle = pinnacle_element.find_element(By.XPATH,
                                                         '..').find_element(By.XPATH, '..').find_element(By.XPATH, '..')
     except NoSuchElementException:
-
-        return None
+        driver.close()
+        return -1
 
     pinnacle_odds = parent_pinnacle.text.split(" ")
-    odds = pinnacle_odds[3].split("\n")
+    try:
+        odds = pinnacle_odds[3].split("\n")
+    except:
+        driver.close()
+        return -1
 
     float_odds = [float(x) for x in odds[1:-1]]
 
+    if not float_odds[0] > 2 or not float_odds[1] > 2 or not float_odds[2] > 2:
+        driver.close()
+        return -1
+
     minOdd = min(float_odds)
     minOdd_index = float_odds.index(minOdd)
-    odd_web_element = pinnacle_element = parent_pinnacle.find_elements(
+    odd_web_element = parent_pinnacle.find_elements(
         By.CLASS_NAME, 'odds')[minOdd_index]
     isNotFound = True
     opening_odd = str()
@@ -111,9 +114,9 @@ def get_single_match_result(url):
     odds.append(match_score)
 
     print("odd: ", odds)
-    if float_odds[0] > 2 and float_odds[1] > 2 and float_odds[2] > 2:
+    if float(opening_odd) > 2:
         odds.append(True)
     else:
         odds.append(False)
-
+    driver.close()
     return odds

@@ -11,8 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Creating Views Here
 
-wasSatisfies = []
-isSatisfies = []
+
 # Login the User View
 
 
@@ -88,22 +87,18 @@ def get_odds(request):
             response = json.loads(request.body)
             url = response["url"]
             odds = get_single_match_result(url)
-            if odds != None:
+            if odds == -1:
+                return JsonResponse({"odds": ["-1"]})
+            elif odds != None:
                 if odds[len(odds) - 1]:
-                    if odds[0] not in isSatisfies:
-                        isSatisfies.append(odds[0])
                     odds.append("red")
 
                 else:
-                    if odds[0] in isSatisfies:
-                        isSatisfies.remove(odds[0])
-                        odds.append("green")
-                        return JsonResponse({"odds": odds})
-                    # print(str(odds) + "is red")
-                    return JsonResponse({"odds": []})
-
-            context["odds"] = odds
-            return JsonResponse({"odds": odds})
+                    odds.append("green")
+                context["odds"] = odds
+                return JsonResponse({"odds": odds})
+            else:
+                return JsonResponse({"odds": []})
 
 
 @csrf_exempt

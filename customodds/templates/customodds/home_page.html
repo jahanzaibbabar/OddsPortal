@@ -1,76 +1,91 @@
-{% extends 'customodds/base.html' %}
-{% load static %}
-{% block page_title %}Clef de Bras{% endblock %}
-{% block css_links %}
+{% extends 'customodds/base.html' %} {% load static %} {% block page_title%}Clef
+de Bras{% endblock %} {% block css_links %}
 
-<link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap"
+  rel="stylesheet"
+/>
 
-<link rel="stylesheet" href="{% static 'customodds/fonts/icomoon/style.css' %}">
+<link
+  rel="stylesheet"
+  href="{% static 'customodds/fonts/icomoon/style.css' %}"
+/>
 
-<link rel="stylesheet" href="{% static 'customodds/css/owl.carousel.min.css' %}">
+<link
+  rel="stylesheet"
+  href="{% static 'customodds/css/owl.carousel.min.css' %}"
+/>
 
 <!-- Bootstrap CSS -->
-<link rel="stylesheet" href="{% static 'customodds/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'customodds/css/bootstrap.min.css' %}" />
 
 <!-- Style -->
-<link rel="stylesheet" href="{% static 'customodds/css/style_table.css' %}">
+<link rel="stylesheet" href="{% static 'customodds/css/style_table.css' %}" />
 
-
-{% endblock %}
-{% block content %}
+{% endblock %} {% block content %}
 
 <div class="content">
-    
-    <div class="container">
-            <h1 style="text-align: center; color : white; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; letter-spacing: 8px;">| CLEF DE BRAS |</h1>
-            <h2 class="mb-5">Welcome <b>{{request.user.username}} &nbsp;&nbsp;</b> <span><b ><a href="{% url 'logout' %}" style="align-self: right; cursor: pointer ; color: rgb(182, 57, 19);">LOGOUT</a></b></span></h2>
-            
-            <div id="match_date">
-                {% for date in dates %}
-                    <span><a href="{% url 'home_page' date.0%}">{{date.1}}</a></span> &nbsp;&nbsp;
-                {% endfor %}
-            </div>
-            <br>
-            <h4><span style="color: brown;">STATUS : </span><span id="status"></span></h4>
-            <div id="details"></div>
+  <div class="container">
+    <h1
+      style="
+        text-align: center;
+        color: white;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        letter-spacing: 8px;
+      "
+    >
+      | CLEF DE BRAS |
+    </h1>
+    <h2 class="mb-5">
+      Welcome <b>{{request.user.username}} &nbsp;&nbsp;</b>
+      <span
+        ><b
+          ><a
+            href="{% url 'logout' %}"
+            style="align-self: right; cursor: pointer; color: rgb(182, 57, 19)"
+            >LOGOUT</a
+          ></b
+        ></span
+      >
+    </h2>
 
-
-            <br>
-            <div class="table-responsive">
-    
-                <table class="table table-striped custom-table" id="data-table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Index</th>
-                            <th scope="col">Time</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Score</th>
-                            <th scope="col">1</th>
-                            <th scope="col">X</th>
-                            <th scope="col">2</th>
-                            <th scope="col">Opening Odds</th>
-                            <th scope="col">Payout</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-    
-                    </tbody>
-                </table>
-            </div>
-            
-    
-        </div>
-    
+    <div id="match_date">
+      {% for date in dates %}
+      <span><a href="{% url 'home_page' date.0%}">{{date.1}}</a></span>
+      &nbsp;&nbsp; {% endfor %}
     </div>
-    
-    
-    
-    <script src="{% static 'customodds/js/jquery.min.js' %}" ></script>
-    <script src="{% static 'customodds/js/popper.js' %}"></script>
-    <script src="{% static 'customodds/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'customodds/js/main.js' %}"></script>
-    <script src="{% static 'customodds/js/scripts.js' %}"></script>
-    
+    <br />
+    <h4>
+      <span style="color: brown">STATUS : </span><span id="status"></span>
+    </h4>
+    <div id="details"></div>
 
-    {% endblock %}
+    <br />
+    <div class="table-responsive">
+      <table class="table table-striped custom-table" id="data-table">
+        <thead>
+          <tr>
+            <th scope="col">Index</th>
+            <th scope="col">Time</th>
+            <th scope="col">Name</th>
+            <th scope="col">Score</th>
+            <th scope="col">1</th>
+            <th scope="col">X</th>
+            <th scope="col">2</th>
+            <th scope="col">Opening Odds</th>
+            <th scope="col">Payout</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'customodds/js/jquery.min.js' %}"></script>
+<script src="{% static 'customodds/js/popper.js' %}"></script>
+<script src="{% static 'customodds/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'customodds/js/main.js' %}"></script>
+<script src="{% static 'customodds/js/scripts.js' %}"></script>
+
+{% endblock %}
